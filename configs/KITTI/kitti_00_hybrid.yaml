@@ -1,0 +1,28 @@
+inherit_from: configs/KITTI/kitti_00.yaml
+SLAM:
+  loop_closure: false # Lightweight loop matching in both feature modes.
+tracking:
+  feature_mode: hybrid # single: lightweight matching; hybrid: conditional MASt3R fallback.
+  heavy_model:
+    resize_size: 512 # MASt3R input size; preserve the checkpoint preprocessing.
+    match_stride: 2
+    border: 3
+  hybrid:
+    rotation_threshold_deg: 5.0 # Rotation-prior discrepancy that triggers hybrid matching.
+    translation_angle_threshold_deg: 15.0 # Translation-direction discrepancy that triggers hybrid matching.
+    min_inliers: 120
+    min_translation_m: 0.1
+    normalize_frame_gap: true
+    ghost_rotation: false
+    side_slip_deg: null
+    min_matches: 24
+    min_candidate_inliers: 30
+    min_inlier_ratio: 0.15
+    acceptance: support
+    min_support: 0.25
+    support_gain: 0.05
+    solver: essential
+    essential_threshold_px: 0.5 # RANSAC threshold for the MASt3R Essential candidate only.
+    homography_threshold_px: 1.0
+    gric_sigma_px: 0.8
+    pnp_reprojection_error_px: 1.0

@@ -1,0 +1,171 @@
+Results:
+  save_ckpt: False # Export Gaussian checkpoints after full-mode evaluation.
+  save_results: True
+  save_dir: "results/KITTI-360"
+  save_trj: True
+  save_trj_kf_intv: 10
+  use_gui: False
+  eval_rendering: True
+  use_wandb: False
+
+Dataset:
+  type: 'kitti'
+  sensor_type: 'mono'
+  pcd_downsample: 1
+  pcd_downsample_init: 1
+  adaptive_pointsize: True
+  point_size: 0.005
+
+Training:
+  init_itr_num: 1050
+  init_gaussian_update: 100
+  init_gaussian_reset: 500
+  init_gaussian_th: 0.005
+  init_gaussian_extent: 30
+  tracking_itr_num: 300
+  mapping_itr_num: 1
+  gaussian_update_every: 150
+  gaussian_update_offset: 50
+  gaussian_th: 0.7
+  gaussian_extent: 1.0
+  gaussian_reset: 2001
+  size_threshold: 20
+  kf_interval: 15
+  window_size: 4
+  pose_window: 5
+  edge_threshold: 1.1
+  rgb_boundary_threshold: 0.01
+
+  scale_min: 0.01
+  scale_min_weight: 2.0
+  opacity_min: 0.05
+  opacity_min_weight: 1.0
+
+  kf_translation: 0.08
+  kf_min_translation: 0.05
+  kf_overlap: 0.9
+  kf_cutoff: 0.3
+  prune_mode: 'slam'
+  single_thread: True
+  spherical_harmonics: False
+
+  kf_iter_num: 3
+  alpha: 0.99
+
+  loss_thresh: 0.1
+  prune_thresh: 0.99
+
+  lr:
+    cam_rot_delta: 0.003
+    cam_trans_delta: 0.001
+
+opt_params:
+  iterations: 30000
+  position_lr_init: 0.0016
+  position_lr_final: 0.0000016
+  position_lr_delay_mult: 0.01
+  position_lr_max_steps: 30000
+  feature_lr: 0.0025
+  opacity_lr: 0.05
+  scaling_lr: 0.001
+  rotation_lr: 0.001
+  percent_dense: 0.01
+  lambda_dssim: 0.2
+  densification_interval: 100
+  opacity_reset_interval: 3000
+  densify_from_iter: 500
+  densify_until_iter: 15000
+  densify_grad_threshold: 0.0002
+  min_opacity: 0.005
+
+model_params:
+  sh_degree: 0
+  source_path: ""
+  model_path: ""
+  resolution: -1
+  white_background: False
+  data_device: "cuda"
+
+pipeline_params:
+  convert_SHs_python: False
+  compute_cov3D_python: False
+
+SLAM:
+  # Download the ORB vocabulary here, or set your own path (see README).
+  vocab_path: "ORBvoc.txt"
+  loop_closure: True # Lightweight loop matching in both feature modes.
+  viz: True
+  motion_thresh: 24.0 # Minimum image motion for selecting a tracked frame.
+  loop_detect_thresh: 0.034 # Retrieval similarity threshold for loop candidates.
+  3d2d_thread: 20
+  2d2d_thread: 20
+  use_heavy: False
+
+tracking:
+  feature_mode: "single" # single: lightweight matching; hybrid: conditional MASt3R fallback.
+  filter: True
+
+  extractor_name: "ALIKED"
+  max_keypoints: 2048
+  resize_width: 1024 # Longest image edge used by the lightweight matcher.
+  device: "cuda"
+
+  heavy_model:
+    name: "MASt3R"
+    # Clone MASt3R here, or set your own checkout path (see README).
+    repo_path: "thirdparty/mast3r"
+    # Download the checkpoint here, or set your own path (see README).
+    weights_path: "checkpoints/MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric.pth"
+    resize_size: 512 # MASt3R input size; preserve the checkpoint preprocessing.
+    match_stride: 2
+    border: 3
+
+  hybrid:
+    rotation_threshold_deg: 5.0 # Rotation-prior discrepancy that triggers hybrid matching.
+    translation_angle_threshold_deg: 15.0 # Translation-direction discrepancy that triggers hybrid matching.
+    min_inliers: 120
+    min_translation_m: 0.1
+    normalize_frame_gap: true
+    ghost_rotation: false
+    side_slip_deg: null
+    min_matches: 24
+    min_candidate_inliers: 30
+    min_inlier_ratio: 0.15
+    acceptance: support
+    min_support: 0.25
+    support_gain: 0.05
+    solver: essential
+    essential_threshold_px: 0.5 # RANSAC threshold for the MASt3R Essential candidate only.
+    homography_threshold_px: 1.0
+    gric_sigma_px: 0.8
+    pnp_reprojection_error_px: 1.0
+    apply_replacement: true
+
+DepthModel:
+  selected_model: 'UniDepthV2'
+
+  DepthAnything3:
+    # Download the checkpoint here, or set your own path (see README).
+    model_path: 'checkpoints/DA3METRIC-LARGE'
+    process_res: 1024 # Depth-model processing resolution.
+    depth_scale_factor: 2.4 # Dataset-specific depth scale correction.
+    use_intrinsics: True # Pass camera intrinsics to the depth adapter.
+
+  UniDepthV2:
+    from_huggingface: False
+    # Download the checkpoint here, or set your own path (see README).
+    local_snapshot_path: 'checkpoints/unidepth-v2-vitl14'
+    huggingface:
+      model_name: 'lpiccinelli/unidepth-v2-vitl14'
+      commit_hash: '1d0d3c52f60b5164629d279bb9a7546458e6dcc4'
+
+Hierarchical:
+  voxel_size_lis: [0.1, 0.25, 1, 5, 25] # One voxel size per LoD; len(distance_lis) + 1 entries.
+  distance_lis: [20.0, 40.0, 80.0, 160.0] # Distance boundaries between LoD levels.
+  n_offsets: 24
+  point_ratio: 3 # Random subsampling divisor; used only when use_nms is false.
+  appearance_dim: 64
+  color_refinement_iter: 20 # Refinement steps per stored keyframe.
+  use_nms: True # Select local maxima instead of random point subsampling.
+  rendering_width: 480 # Mapping/rendering width; tracking uses its own resolution.
+  upsampling_method: 'bicubic'

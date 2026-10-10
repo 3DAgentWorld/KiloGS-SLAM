@@ -1,0 +1,31 @@
+inherit_from: "configs/Waymo/base_config.yaml"
+
+Dataset:
+  # Set this to your RGB image folder; relative paths start at the repository root.
+  color_path: "datasets/waymo/13476/FRONT/rgb"
+  Calibration:
+    fx: 2056.282
+    fy: 2056.282
+    cx: 939.577
+    cy: 641.103
+    k1: 0.030161695455207253
+    k2: -0.27366348163840665
+    p1: 0.001099757907898257
+    p2: 0.0019278126890982551
+    k3: 0.0
+    width: 1920
+    height: 1280
+    distorted: False
+SLAM:
+  n_max: 5000
+  frame_num: 197
+
+DepthModel:
+  selected_model: 'DepthAnything3'
+
+  DepthAnything3:
+    # Download the checkpoint here, or set your own path (see README).
+    model_path: 'checkpoints/DA3METRIC-LARGE'
+    process_res: 960 # Depth-model processing resolution.
+    depth_scale_factor: 3.5 # Dataset-specific depth scale correction.
+    use_intrinsics: True # Pass camera intrinsics to the depth adapter.

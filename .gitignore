@@ -1,0 +1,89 @@
+# Copy to .gitignore before publishing; this repository also includes .gitignore.
+# Experiment outputs, local datasets and downloaded models
+/results/
+/output/
+/data
+/datasets
+/weights/
+/checkpoints/
+/snapshot_dir/
+/ORBvoc.txt
+/ORBvoc.txt.tar.gz
+/wandb/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.pth.tar
+*.ply
+*.mp4
+*.bag
+*.log
+/tmp_log_*
+/tmp_gpu_*
+
+# Compiled extensions and installation artifacts
+build/
+dist/
+*.egg-info/
+*.so
+*.o
+*.a
+CMakeCache.txt
+CMakeFiles/
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Editor settings and local credentials
+.vscode/
+.idea/
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Historical local reports
+/*.csv
+/rebuttal/task1/
+/rebuttal/task2/
+
+# External model source; install using the README instructions.
+/thirdparty/mast3r
+
+# Local review material and experiment utilities
+/rebuttal/
+/docs/DATA_SHARING.md
+/scripts/benchmark_run.py
+
+# Vendored dependencies: exclude demos, documentation and upstream CI tooling.
+# Keep source, build metadata, runtime resources and all license notices.
+**/.github/
+/DBoW2/demo/
+/DBoW2/package.xml
+/LightGlue/assets/
+/LightGlue/benchmark.py
+/DPRetrieval/pybind11/docs/
+/DPRetrieval/pybind11/noxfile.py
+/thirdparty/eigen-3.4.0/bench/
+/thirdparty/eigen-3.4.0/blas/
+/thirdparty/eigen-3.4.0/ci/
+/thirdparty/eigen-3.4.0/debug/
+/thirdparty/eigen-3.4.0/demos/
+/thirdparty/eigen-3.4.0/doc/
+/thirdparty/eigen-3.4.0/failtest/
+/thirdparty/eigen-3.4.0/lapack/
+/thirdparty/eigen-3.4.0/scripts/
+/thirdparty/eigen-3.4.0/test/
+/submodules/diff-gaussian-rasterization_fastgs/third_party/glm/doc/
+/submodules/diff-gaussian-rasterization_fastgs/third_party/glm/test/
+/submodules/diff-gaussian-rasterization_fastgs/third_party/glm/util/
+
+# Public README figures: include the root assets directory.
+!/assets/
+!/assets/**

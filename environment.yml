@@ -1,0 +1,7 @@
+name: kilogs-slam
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.18
+  - pip
+  - ld_impl_linux-64=2.40

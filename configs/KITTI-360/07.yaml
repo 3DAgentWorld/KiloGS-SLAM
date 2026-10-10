@@ -1,0 +1,32 @@
+inherit_from: "configs/KITTI-360/base_config.yaml"
+
+Dataset:
+  # Set this to your RGB image folder; relative paths start at the repository root.
+  color_path: "datasets/KITTI-360/data_2d_raw/2013_05_28_drive_0007_sync/image_00/data_rect"
+  index_path: "configs/KITTI-360/frames/Seq_0007_Frames.txt"
+  Calibration:
+    fx: 552.554261
+    fy: 552.554261
+    cx: 682.049453
+    cy: 238.769549
+    k1: 0.0
+    k2: 0.0
+    p1: 0.0
+    p2: 0.0
+    k3: 0.0
+    width: 1408
+    height: 376
+    distorted: False
+
+SLAM:
+  n_max: 15000
+  frame_num: 2890
+
+tracking:
+  filter: False
+  extractor_name: "DISK"
+
+DepthModel:
+
+  DepthAnything3:
+    process_res: 1408 # Depth-model processing resolution.

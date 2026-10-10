@@ -1,0 +1,30 @@
+inherit_from: "configs/KITTI/base_config.yaml"
+
+Dataset:
+  # Set this to your RGB image folder; relative paths start at the repository root.
+  color_path: "datasets/KITTI_stereo/07/image_2"
+  Calibration:
+    fx: 7.070912000000e+02
+    fy: 7.070912000000e+02
+    cx: 6.018873000000e+02
+    cy: 1.831104000000e+02
+    k1: 0.0
+    k2: 0.0
+    p1: 0.0
+    p2: 0.0
+    k3: 0.0
+    width: 1226
+    height: 370
+    distorted: False
+
+SLAM:
+  n_max: 5000
+  frame_num: 1101
+
+tracking:
+  filter: True
+
+DepthModel:
+
+  DepthAnything3:
+    process_res: 1226 # Depth-model processing resolution.
